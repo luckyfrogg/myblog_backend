@@ -2,7 +2,7 @@
     <a-layout-content
         :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
       >
-        文章列表
+        文章s列表
       </a-layout-content>
 </template>
 

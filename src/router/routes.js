@@ -8,58 +8,31 @@ const frameIn = [
     path: '/',
     component: () => import('@/components/LayoutContainer'),
     redirect: { name: 'article-list' },
-    meta: { title: '首页',requiresAuth: true },
+    meta: { title: '首页', requiresAuth: true },
     children: [
       {
-        path: 'article',
-        name: 'article',
-        meta: { title: '文章管理',requiresAuth: true },
-        redirect: { name: 'article-list' },
+        path: '/article/list',
+        name: 'article-list',
+        meta: { title: '文章列表', requiresAuth: true },
         component: () => import('@/components/PageMain/article/ArticleList'),
-        children: [
-          {
-            path: 'list',
-            name: 'article-list',
-            meta: { title: '文章列表',requiresAuth: true },
-            component: () => import('@/components/PageMain/article/ArticleList'),
-          },
-          {
-            path: 'create',
-            name: 'create-article',
-            meta: { title: '添加文章',requiresAuth: true },
-            component: () => import('@/components/PageMain/article/CreateArticle'),
-          }
-        ]
       },
       {
-        path: 'cate',
-        name: 'cate',
-        meta: { title: '分类管理',requiresAuth: true },
-        redirect: { name: 'cate-list' },
+        path: '/article/create',
+        name: 'article-create',
+        meta: { title: '添加文章', requiresAuth: true },
+        component: () => import('@/components/PageMain/article/ArticleCreate'),
+      },
+      {
+        path: '/cate/list',
+        name: 'cate-list',
+        meta: { title: '分类列表', requiresAuth: true },
         component: () => import('@/components/PageMain/cate/CateList'),
-        children: [
-          {
-            path: 'list',
-            name: 'cate-list',
-            meta: { title: '分类列表',requiresAuth: true },
-            component: () => import('@/components/PageMain/cate/CateList'),
-          }
-        ]
       },
       {
-        path: 'tag',
-        name: 'tag',
-        meta: { title: '标签管理',requiresAuth: true },
-        redirect: { name: 'tag-list' },
+        path: 'tag/list',
+        name: 'tag-list',
+        meta: { title: '标签列表', requiresAuth: true },
         component: () => import('@/components/PageMain/tag/TagList'),
-        children: [
-          {
-            path: 'list',
-            name: 'tag-list',
-            meta: { title: '标签列表',requiresAuth: true },
-            component: () => import('@/components/PageMain/tag/TagList'),
-          }
-        ]
       }
     ]
   },
@@ -86,8 +59,8 @@ const frameOut = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/Login'),
-    meta:{
-      title:"登录"
+    meta: {
+      title: "登录"
     }
   }
 ]

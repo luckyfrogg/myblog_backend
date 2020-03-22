@@ -6,13 +6,13 @@
     </a-layout-sider>
     <a-layout>
       <Header :collapsed="collapsed" @click="()=>{collapsed=!collapsed}" />
-      <router-view />
-      <!-- <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
-      >
-        <router-view />
-      </a-layout-content> -->
-      <a-layout-footer>sss</a-layout-footer>
+
+        <transition name="fade">
+            <router-view />
+        </transition>
+      
+     
+      <a-layout-footer>footer</a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -27,10 +27,18 @@ export default {
   },
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      transitionName: 'slide-left'
     };
   },
-  methods: {}
+  methods: {},
+//   watch: {
+//   '$route' (to, from) {
+//     const toDepth = to.path.split('/').length
+//     const fromDepth = from.path.split('/').length
+//     this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+//   }
+// }
 };
 </script>
 <style>
@@ -53,5 +61,11 @@ export default {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

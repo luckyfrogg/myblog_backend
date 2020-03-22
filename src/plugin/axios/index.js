@@ -30,16 +30,7 @@ axios.interceptors.request.use(function (config) {
 // 在这里对返回的数据进行处理
 // 在这里添加你自己的逻辑
 axios.interceptors.response.use(res => {
-  if (res.data.code !== undefined) {
-    if (res.data.code !== 200) {
-        // $message.error(res.data.msg)
-      return Promise.reject(res.data.msg)
-    } else {
-      return res.data.data
-    }
-  } else {
     return res.data
-  }
 }, error => {
   if (error.response.status === 401) {
       var timer=setTimeout(()=>{
