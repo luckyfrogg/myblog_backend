@@ -2,16 +2,13 @@
   <a-layout id="components-layout-demo-custom-trigger">
     <a-layout-sider :trigger="null" collapsible v-model="collapsed">
       <div class="logo" />
-      <Sider :collapsed="collapsed"/>
+      <Sider :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>
       <Header :collapsed="collapsed" @click="()=>{collapsed=!collapsed}" />
 
-        <transition name="fade">
-            <router-view />
-        </transition>
-      
-     
+      <router-view />
+
       <a-layout-footer>footer</a-layout-footer>
     </a-layout>
   </a-layout>
@@ -28,21 +25,21 @@ export default {
   data() {
     return {
       collapsed: false,
-      transitionName: 'slide-left'
+      transitionName: "slide-left"
     };
   },
-  methods: {},
-//   watch: {
-//   '$route' (to, from) {
-//     const toDepth = to.path.split('/').length
-//     const fromDepth = from.path.split('/').length
-//     this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-//   }
-// }
+  methods: {}
+  //   watch: {
+  //   '$route' (to, from) {
+  //     const toDepth = to.path.split('/').length
+  //     const fromDepth = from.path.split('/').length
+  //     this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+  //   }
+  // }
 };
 </script>
 <style>
-.ant-layout-sider{
+.ant-layout-sider {
   height: 100vh;
 }
 #components-layout-demo-custom-trigger .trigger {
@@ -62,8 +59,9 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
