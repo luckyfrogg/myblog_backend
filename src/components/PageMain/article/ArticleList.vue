@@ -3,7 +3,6 @@
     :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
   >文章列表</a-layout-content>
 </template>
-
 <script>
 export default {
   name: "article-list",
