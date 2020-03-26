@@ -35,7 +35,7 @@
                 :key="index"
                 size="small"
                 :class="['cate_btn',item.actived?'active':'']"
-                @click="checkCate(index)"
+                @click="selectCate(index)"
               >{{item.name}}</a-button>
               <a-button
                 type="primary"
@@ -43,6 +43,38 @@
                 :class="['cate_btn']"
                 @click="showCreateCatePop"
               >+</a-button>
+            </div>
+          </a-col>
+        </a-row>
+
+        <a-row type="flex" align="top" class="form_wrap">
+          <a-col>
+            <label class for="tag">文章标签：</label>
+          </a-col>
+          <a-col>
+            <div class="cate_btn_group">
+              <a-button
+                type="default"
+                v-for="(item,index) in tagArr"
+                :key="index"
+                size="small"
+                :class="['cate_btn',item.actived?'active':'']"
+                @click="selectTags(index)"
+              >{{item.name}}</a-button>
+              <a-button
+                type="primary"
+                size="small"
+                :class="['cate_btn']"
+                @click="showCreateTagPop"
+              >+</a-button>
+            </div>
+          </a-col>
+        </a-row>
+
+        <a-row type="flex" align="top" class="form_wrap">
+          <a-col :span="24">
+            <div id="markdown_container">
+              <mavon-editor v-model="formData.content" :toolbars="mavonToolBars" />
             </div>
           </a-col>
         </a-row>
@@ -57,7 +89,18 @@
       okText="确定"
       cancelText="取消"
     >
-      <a-input placeholder="分类名称" v-model="cateName" />
+      <a-input placeholder="分类" v-model="createCateVal" />
+    </a-modal>
+    <a-modal
+      title="创建标签"
+      :visible="createTagPopVisible"
+      @ok="handleCreateTag"
+      :confirmLoading="createTagLoading"
+      @cancel="handleCancelCreateTag"
+      okText="确定"
+      cancelText="取消"
+    >
+      <a-input placeholder="标签" v-model="createTagVal" />
     </a-modal>
   </a-layout-content>
 </template>
@@ -72,39 +115,79 @@ export default {
         title: "",
         content: "",
         cate_id: "",
-        tags_group: ""
+        tags_group: []
+      },
+      mavonToolBars:{
+           bold: true, // 粗体
+      italic: true, // 斜体
+      header: true, // 标题
+      underline: true, // 下划线
+      strikethrough: true, // 中划线
+      mark: true, // 标记
+      superscript: true, // 上角标
+      subscript: true, // 下角标
+      quote: true, // 引用
+      ol: true, // 有序列表
+      ul: true, // 无序列表
+      link: true, // 链接
+      imagelink: true, // 图片链接
+      code: true, // code
+      table: true, // 表格
+      fullscreen: true, // 全屏编辑
+      readmodel: true, // 沉浸式阅读
+      htmlcode: true, // 展示html源码
+      help: true, // 帮助
+      /* 1.3.5 */
+      undo: true, // 上一步
+      redo: true, // 下一步
+      trash: false, // 清空
+      save: false, // 保存（触发events中的save事件）
+      /* 1.4.2 */
+      navigation: true, // 导航目录
+      /* 2.1.8 */
+      alignleft: true, // 左对齐
+      aligncenter: true, // 居中
+      alignright: true, // 右对齐
+      /* 2.2.1 */
+      subfield: true, // 单双栏模式
+      preview: true, // 预览
       },
       cateArr: [],
       createCateVal: "",
       createCatePopVisible: false,
       createCateLoading: false,
-      cateName: ""
+      //tag
+      tagArr: [],
+      createTagVal: "",
+      createTagPopVisible: false,
+      createTagLoading: false
     };
   },
   computed: {},
   created() {
     this.getCateList();
+    this.getTagList();
   },
-  mounted() {
-    //   this.createCate()
-  },
+  mounted() {},
   methods: {
     handleCreateCate() {
       let _this = this;
-      if(!!!_this.cateName.trim()){
-          return;
+      if (!!!_this.createCateVal.trim()) {
+        return;
       }
       this.createCateLoading = true;
-      this.$post("api/b/createCate", { name: _this.cateName.trim() }).then(res => {
-        console.log(res);
-        if (res.code == 200) {
-          _this.$message.success("创建成功！");
-          _this.cateName = "";
-          _this.getCateList();
+      this.$post("api/b/createCate", { name: _this.createCateVal.trim() }).then(
+        res => {
+          console.log(res);
+          if (res.code == 200) {
+            _this.$message.success("创建成功！");
+            _this.createCateVal = "";
+            _this.getCateList();
+          }
+          this.createCatePopVisible = false;
+          this.createCateLoading = false;
         }
-        this.createCatePopVisible = false;
-        this.createCateLoading = false;
-      });
+      );
     },
     showCreateCatePop() {
       this.createCatePopVisible = true;
@@ -112,11 +195,14 @@ export default {
     handleCancelCreateCate() {
       this.createCatePopVisible = false;
     },
-    checkCate(index) {
+
+    selectCate(index) {
       let _this = this;
       this.cateArr = this.cateArr.map((item, i) => {
         if (index == i) {
+          let actived = item.actived;
           _this.$set(_this.cateArr[i], "actived", !item.actived);
+          _this.$set(_this.formData, "cate_id", !actived ? item.id : "");
         } else {
           _this.$set(_this.cateArr[i], "actived", false);
         }
@@ -133,15 +219,64 @@ export default {
         }
       });
     },
-    createCate() {
+    //tag
+    handleCreateTag() {
       let _this = this;
-      this.$post("api/b/createCate", { name: _this.createCateVal.trim() }).then(
+      if (!!!_this.createTagVal.trim()) {
+        return;
+      }
+      this.createTagLoading = true;
+      this.$post("api/b/createTag", { name: _this.createTagVal.trim() }).then(
         res => {
-          if (res)
-            // console.log(res.data)
-            this.getCateList();
+          console.log(res);
+          if (res.code == 200) {
+            _this.$message.success("创建成功！");
+            _this.createTagVal = "";
+            _this.getTagList();
+          }
+          this.createTagPopVisible = false;
+          this.createTagLoading = false;
         }
       );
+    },
+    showCreateTagPop() {
+      this.createTagPopVisible = true;
+    },
+    handleCancelCreateTag() {
+      this.createTagPopVisible = false;
+    },
+    selectTags(i) {
+      let _this = this;
+      _this.tagArr.forEach((item, index) => {
+        if (index === i) {
+          if (item.actived === false) {
+            //判断当前已选标签数是否小于等于4
+            if (_this.formData.tags_group.length <= 2) {
+              _this.formData.tags_group.push(item.id);
+              _this.$set(_this.tagArr[i], "actived", !item.actived);
+            } else {
+              _this.$message.success("最多仅支持选择3个标签！");
+            }
+          } else {
+            _this.formData.tags_group.splice(
+              _this.formData.tags_group.indexOf(item.id),
+              1
+            );
+            _this.$set(_this.tagArr[i], "actived", !item.actived);
+          }
+        }
+      });
+      //   console.log(_this.formData.tags_group)
+    },
+    getTagList() {
+      this.tagArr = [];
+      this.$get("api/b/tagList").then(res => {
+        if (res.code == 200) {
+          res.data.forEach(item => {
+            this.tagArr.push({ ...item, actived: false });
+          });
+        }
+      });
     }
   },
   components: {}
@@ -167,5 +302,11 @@ export default {
       }
     }
   }
+}
+#markdown_container{
+    .v-note-wrapper{
+        width: 100%;
+        height: 600px;
+    }
 }
 </style>

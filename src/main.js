@@ -5,9 +5,13 @@ import store from './store'
 import Antd from 'ant-design-vue';
 import { fetchPost, fetchGet } from '@/plugin/axios/index';
 import 'ant-design-vue/dist/antd.css';
+import mavonEditor from 'mavon-editor'//markdown
+import 'mavon-editor/dist/css/index.css'
 Vue.prototype.$get = fetchGet;
 Vue.prototype.$post = fetchPost;
 Vue.config.productionTip = false;
+// use
+Vue.use(mavonEditor)
 Vue.use(Antd);
 new Vue({
   router,
@@ -21,29 +25,29 @@ new Vue({
         {
           title: "文章管理",
           name: "article",
-          iconType:"read",
+          iconType: "read",
           children: [
             {
               title: "文章列表",
               name: "article-list",
-              iconType:"ordered-list",
+              iconType: "ordered-list",
             },
             {
               title: "创建文章",
               name: "article-create",
-              iconType:"form",
+              iconType: "form",
             }
           ],
         },
         {
           title: "分类列表",
           name: "cate-list",
-          iconType:"profile",
+          iconType: "profile",
         },
         {
           title: "标签列表",
           name: "tag-list",
-          iconType:"tags",
+          iconType: "tags",
         },
       ]
       this.$store.dispatch('setMenu', menu)

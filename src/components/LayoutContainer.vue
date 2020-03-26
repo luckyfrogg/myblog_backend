@@ -39,9 +39,9 @@ export default {
 };
 </script>
 <style>
-.ant-layout-sider {
+/* .ant-layout-sider {
   height: 100vh;
-}
+} */
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
   line-height: 64px;
