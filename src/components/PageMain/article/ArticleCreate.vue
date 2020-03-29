@@ -123,7 +123,7 @@ export default {
       formData: {
         title: "",
         content: "",
-        cate_id: "",
+        cate_id: null,
         tags_group: [],
         html: ""
       },
@@ -222,7 +222,7 @@ export default {
     },
     submit() {
       let _this = this;
-      this.formData.tags_group = this.formData.tags_group.join(",");
+      this.formData.tags_group =this.formData.tags_group.length? this.formData.tags_group.join(","):'';
       this.$post("api/b/createArticle", { ..._this.formData }).then(res => {
         console.log(res);
         if (res.code == 200) {
@@ -233,7 +233,8 @@ export default {
     },
     clearForm() {
       let _this = this;
-      _this.cateArr = [];
+      _this.getTagList();
+      _this.getCateList();
       _this.tagArr = [];
       Object.keys(_this.formData).forEach(item => {
         _this.$set(_this.formData, item, "");
@@ -353,6 +354,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+#title{
+  width: 100%;
+}
 .article_create {
   .btn_group {
     .btn_caogao {
