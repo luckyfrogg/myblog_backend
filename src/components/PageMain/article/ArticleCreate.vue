@@ -74,7 +74,14 @@
         <a-row type="flex" align="top" class="form_wrap">
           <a-col :span="24">
             <div id="markdown_container">
-              <mavon-editor v-model="formData.content" :toolbars="mavonToolBars" />
+              <mavon-editor
+                id="mark"
+                ref="md"
+                v-model="formData.content"
+                :toolbars="mavonToolBars"
+                @change="markdownChange"
+                @imgAdd="imgAdd"
+              />
             </div>
           </a-col>
         </a-row>
@@ -106,17 +113,19 @@
 </template>
 
 <script>
+import * as qiniu from "qiniu-js";
 export default {
   name: "article-create",
   props: {},
   data() {
     return {
-      qiniuToken:'',
+      qiniuToken: "",
       formData: {
         title: "",
         content: "",
         cate_id: "",
-        tags_group: []
+        tags_group: [],
+        html: ""
       },
       mavonToolBars: {
         bold: true, // 粗体
@@ -172,12 +181,63 @@ export default {
   },
   mounted() {},
   methods: {
+    markdownChange(markdown, html) {
+      this.formData.html = html;
+      console.log(html);
+    },
+    imgAdd(pos, file) {
+      //markdown添加照片上传到七牛云
+      this.file = file;
+      this.pos = pos;
+      let key = this.file.name;
+      // 调用七牛的接口将图片上传至七牛
+      let observable = qiniu.upload(this.file, key, this.qiniuToken);
+      observable.subscribe(
+        this.uploadNext,
+        this.uploadError,
+        this.uploadComplete
+      );
+      return false;
+    },
+    uploadNext(res) {
+      // ...
+    },
+    uploadError(err) {
+      alert(err);
+    },
+    uploadComplete(res) {
+      console.log("res:", res);
+      // 取得七牛返回的url
+      let url = "http://img.lizhi0128.com/" + res.key;
+      // 将url插入markdown
+      this.$refs.md.$img2Url(this.pos, url);
+    },
     getQiniuToken() {
       let _this = this;
-      this.$get("api/b/getQiniuToken").then(res => {});
+      this.$get("api/b/getQiniuToken").then(res => {
+        // console.log(res);
+        _this.qiniuToken = res.data.token;
+        // console.log(_this.qiniuToken)
+      });
     },
     submit() {
+      let _this = this;
       this.formData.tags_group = this.formData.tags_group.join(",");
+      this.$post("api/b/createArticle", { ..._this.formData }).then(res => {
+        console.log(res);
+        if (res.code == 200) {
+          _this.$message.success("创建成功！");
+          _this.clearForm();
+        }
+      });
+    },
+    clearForm() {
+      let _this = this;
+      _this.cateArr = [];
+      _this.tagArr = [];
+      Object.keys(_this.formData).forEach(item => {
+        _this.$set(_this.formData, item, "");
+      });
     },
     handleCreateCate() {
       let _this = this;
