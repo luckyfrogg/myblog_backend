@@ -7,9 +7,9 @@ import qs from 'qs'
 import Cookies from 'js-cookie'
 axios.defaults.timeout = 30000;//响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';        //配置请求头
-if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = '/api/'
-}
+// if (process.env.NODE_ENV === 'development') {
+//   axios.defaults.baseURL = '/api/'
+// }
 axios.create({
   // 设置超时时间
   timeout: 60000

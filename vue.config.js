@@ -3,14 +3,15 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
+    publicPath:process.env.NODE_ENV === 'production'
+    ? './'
+    : '/',
     devServer: {
-        "proxy": {
+        proxy: {
             '/api': {
-                "target": "http://127.0.0.1:7201/",
-                "changOrigin": true,
-                "pathRewrite": {
-                    '^/api': ''
-                }
+                target: "http://127.0.0.1:7201",
+                changOrigin: true,
+                ws:true,
             }
         }
     },

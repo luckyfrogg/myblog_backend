@@ -214,7 +214,7 @@ export default {
     },
     getQiniuToken() {
       let _this = this;
-      this.$get("api/b/getQiniuToken").then(res => {
+      this.$get("/api/b/getQiniuToken").then(res => {
         // console.log(res);
         _this.qiniuToken = res.data.token;
         // console.log(_this.qiniuToken)
@@ -223,7 +223,7 @@ export default {
     submit() {
       let _this = this;
       this.formData.tags_group =this.formData.tags_group.length? this.formData.tags_group.join(","):'';
-      this.$post("api/b/createArticle", { ..._this.formData }).then(res => {
+      this.$post("/api/b/createArticle", { ..._this.formData }).then(res => {
         console.log(res);
         if (res.code == 200) {
           _this.$message.success("创建成功！");
@@ -236,8 +236,10 @@ export default {
       _this.getTagList();
       _this.getCateList();
       _this.tagArr = [];
+      
       Object.keys(_this.formData).forEach(item => {
-        _this.$set(_this.formData, item, "");
+        let target=item=='tags_group'?[]:'';
+        _this.$set(_this.formData, item, target);
       });
     },
     handleCreateCate() {
@@ -246,7 +248,7 @@ export default {
         return;
       }
       this.createCateLoading = true;
-      this.$post("api/b/createCate", { name: _this.createCateVal.trim() }).then(
+      this.$post("/api/b/createCate", { name: _this.createCateVal.trim() }).then(
         res => {
           console.log(res);
           if (res.code == 200) {
@@ -281,7 +283,7 @@ export default {
     },
     getCateList() {
       this.cateArr = [];
-      this.$get("api/b/cateList").then(res => {
+      this.$get("/api/b/cateList").then(res => {
         if (res.code == 200) {
           res.data.forEach(item => {
             this.cateArr.push({ ...item, actived: false });
@@ -296,7 +298,7 @@ export default {
         return;
       }
       this.createTagLoading = true;
-      this.$post("api/b/createTag", { name: _this.createTagVal.trim() }).then(
+      this.$post("/api/b/createTag", { name: _this.createTagVal.trim() }).then(
         res => {
           console.log(res);
           if (res.code == 200) {
@@ -340,7 +342,8 @@ export default {
     },
     getTagList() {
       this.tagArr = [];
-      this.$get("api/b/tagList").then(res => {
+      this.$set(this.formData,"tags_group",[]);
+      this.$get("/api/b/tagList").then(res => {
         if (res.code == 200) {
           res.data.forEach(item => {
             this.tagArr.push({ ...item, actived: false });
@@ -380,6 +383,7 @@ export default {
   .v-note-wrapper {
     width: 100%;
     height: 600px;
+    z-index: 20;
   }
 }
 </style>

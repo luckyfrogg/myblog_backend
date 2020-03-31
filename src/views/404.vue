@@ -1,7 +1,6 @@
 <template>
   <div class="page-404">
-
-    aaa
+    404
   </div>
 </template>
 
