@@ -5,31 +5,31 @@ const meta = { requiresAuth: true }
 const frameIn = [
   // 首页
   {
-    path: '/admin',
+    path: '/',
     component: () => import('@/components/LayoutContainer'),
     redirect: { name: 'article-list' },
     meta: { title: '首页', requiresAuth: true },
     children: [
       {
-        path: 'article/list',
+        path: '/article/list',
         name: 'article-list',
         meta: { title: '文章列表', requiresAuth: true },
         component: () => import('@/components/PageMain/article/ArticleList'),
       },
       {
-        path: 'article/create',
+        path: '/article/create',
         name: 'article-create',
         meta: { title: '添加文章', requiresAuth: true },
         component: () => import('@/components/PageMain/article/ArticleCreate'),
       },
       {
-        path: 'cate/list',
+        path: '/cate/list',
         name: 'cate-list',
         meta: { title: '分类列表', requiresAuth: true },
         component: () => import('@/components/PageMain/cate/CateList'),
       },
       {
-        path: 'tag/list',
+        path: '/tag/list',
         name: 'tag-list',
         meta: { title: '标签列表', requiresAuth: true },
         component: () => import('@/components/PageMain/tag/TagList'),
@@ -56,7 +56,7 @@ const errorPage = [
 const frameOut = [
   // 登录
   {
-    path: '/admin/login',
+    path: '/login',
     name: 'login',
     component: () => import('@/views/Login'),
     meta: {

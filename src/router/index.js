@@ -26,7 +26,7 @@ router.beforeEach((to, from, next) => {
     // if not, redirect to login page.
     if (!localStorage['token']) {
       next({
-        path: '/admin/login'
+        path: '/login'
       })
     } else {
       next()

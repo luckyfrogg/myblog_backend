@@ -63,7 +63,7 @@ export default {
                 _this.$message.success('登录成功');
                 // 给提示留出时间，延迟跳转
                 setTimeout(() => {
-                  this.$router.push('/admin')
+                  this.$router.push('/')
                 }, 1500);
           })
       }

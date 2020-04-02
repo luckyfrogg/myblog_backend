@@ -35,7 +35,7 @@ axios.interceptors.response.use(res => {
   if (error.response.status === 401) {
       var timer=setTimeout(()=>{
         router.replace({
-          path: '/admin/login'
+          path: '/login'
         })
         clear(timer)
       },3000);
