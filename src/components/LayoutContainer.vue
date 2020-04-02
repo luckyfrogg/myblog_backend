@@ -1,15 +1,24 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
     <a-layout-sider :trigger="null" collapsible v-model="collapsed">
-      <div class="logo" />
+      <div class="logo" >
+        博客管理系统
+      </div>
       <Sider :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>
       <Header :collapsed="collapsed" @click="()=>{collapsed=!collapsed}" />
+        <main class="main">
+          <router-view />
+        </main>
+      
 
-      <router-view />
-
-      <a-layout-footer>footer</a-layout-footer>
+      <a-layout-footer>
+        <div id="footer">
+          Copyright © 2019-2020 胡橙汁
+          <a href="http://beian.miit.gov.cn/">皖ICP备19002031号</a>
+        </div>
+      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -56,7 +65,10 @@ export default {
 
 #components-layout-demo-custom-trigger .logo {
   height: 32px;
-  background: rgba(255, 255, 255, 0.2);
+  line-height: 32px;
+  color: #fff;
+  background: transparent;
+  text-align: center;
   margin: 16px;
 }
 .fade-enter-active,
@@ -65,5 +77,11 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.ant-layout.ant-layout-has-sider > .ant-layout{
+  min-height: 100vh;
+}
+.ant-layout.ant-layout-has-sider > .ant-layout .main{
+  flex: 1;
 }
 </style>

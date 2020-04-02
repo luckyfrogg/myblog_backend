@@ -12,7 +12,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // }
 axios.create({
   // 设置超时时间
-  timeout: 60000
+  timeout: 15000
 })
 axios.defaults.headers.Authorization = localStorage['token'] || null
 axios.interceptors.request.use(function (config) {
@@ -35,7 +35,7 @@ axios.interceptors.response.use(res => {
   if (error.response.status === 401) {
       var timer=setTimeout(()=>{
         router.replace({
-          path: '/login'
+          path: '/admin/login'
         })
         clear(timer)
       },3000);

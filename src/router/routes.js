@@ -56,7 +56,7 @@ const errorPage = [
 const frameOut = [
   // 登录
   {
-    path: '/login',
+    path: '/admin/login',
     name: 'login',
     component: () => import('@/views/Login'),
     meta: {
