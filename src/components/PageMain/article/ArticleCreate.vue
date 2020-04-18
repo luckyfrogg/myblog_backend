@@ -183,7 +183,6 @@ export default {
   methods: {
     markdownChange(markdown, html) {
       this.formData.html = html;
-      console.log(html);
     },
     imgAdd(pos, file) {
       //markdown添加照片上传到七牛云
@@ -199,6 +198,7 @@ export default {
       );
       return false;
     },
+
     uploadNext(res) {
       // ...
     },
